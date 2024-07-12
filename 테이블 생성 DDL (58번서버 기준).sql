@@ -499,3 +499,9 @@ CREATE TABLE `SPECIAL_CHARACTER` (
   `enabled` varchar(1) NOT NULL DEFAULT 'Y',
   UNIQUE KEY `SPECIAL_CHARACTER_orgin_hex_code_IDX` (`orgin_hex_code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 문자체크 insert문
+
+INSERT INTO SPECIAL_CHARACTER
+(orgin_hex_code, dest_str, enabled)
+VALUES('C2A0', NULL, 'Y'),('E280A8', NULL, 'Y'),('E280A4', '·', 'Y'),('E29E9F', '→', 'Y'),('E29C94', '√', 'Y');
