@@ -1,6 +1,6 @@
 -- dhn_result_back_proc 프로시저
 
-CREATE DEFINER=`root`@`%` PROCEDURE `kakao`.`dhn_result_back_proc`(p_interval int)
+CREATE DEFINER=`root`@`%` PROCEDURE `dhn_result_back_proc`(p_interval int)
 BEGIN
     declare v_userid varchar(20);
     DECLARE v_ul_done INT DEFAULT FALSE;
@@ -102,7 +102,7 @@ END;
 
 -- 불필요문자제거? remove_ws 프로시저
 
-CREATE DEFINER=`root`@`%` FUNCTION `kakao`.`remove_ws`(P_MSG LONGTEXT CHARACTER set utf8) RETURNS longtext CHARSET utf8
+CREATE DEFINER=`root`@`%` FUNCTION `remove_ws`(P_MSG LONGTEXT CHARACTER set utf8) RETURNS longtext CHARSET utf8
 BEGIN
 	declare v_msg LONGTEXT  CHARACTER set utf8;
 	declare v_ohc varchar(20);
