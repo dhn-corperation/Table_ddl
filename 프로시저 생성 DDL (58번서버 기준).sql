@@ -139,7 +139,7 @@ END;
 
 -- DHN_RESULT 테이블 백업용 result_backup 프로시저
 
-CREATE DEFINER=`root`@`%` PROCEDURE `kakao`.`result_backup`()
+CREATE DEFINER=`root`@`%` PROCEDURE `result_backup`()
 BEGIN
 	declare v_userid varchar(20);
 	DECLARE v_ul_done INT DEFAULT FALSE;
