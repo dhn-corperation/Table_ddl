@@ -17,7 +17,7 @@ CREATE TABLE `DHN_CLIENT_LIST` (
   `pre_send_type` tinyint(4) DEFAULT 0 COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때 전 발송 플랫폼(0 : 에이전트 가동 후 변경X, 1 : oshot, 2 : nano)',
   `pre_update_date` timestamp NULL DEFAULT NULL COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때의 시간',
   `description` varchar(500) DEFAULT NULL COMMENT '업체에 대한 설명 및 비고란'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 친구톡 발송용 DHN_REQUEST 테이블
 
@@ -69,7 +69,7 @@ CREATE TABLE `DHN_REQUEST` (
   KEY `send_group` (`send_group`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
   KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 알림톡 발송용 DHN_REQUEST_AT 테이블
 
@@ -123,7 +123,7 @@ CREATE TABLE `DHN_REQUEST_AT` (
   KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
   KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 문자발송 및 비즈메시지 결과저장용 DHN_RESULT 테이블
 
@@ -183,7 +183,7 @@ CREATE TABLE `DHN_RESULT` (
   KEY `result_sync_send_group` (`send_group`,`result`,`sync`) USING BTREE,
   KEY `IDX_DHN_RESULT` (`userid`,`reg_dt`) USING BTREE,
   KEY `userid_result_send_group` (`userid`,`result`,`send_group`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 결과값 발송용 DHN_RESULT_PROC 테이블
 
@@ -243,7 +243,7 @@ CREATE TABLE `DHN_RESULT_PROC` (
   KEY `result_sync_send_group` (`send_group`,`result`,`sync`) USING BTREE,
   KEY `IDX_DHN_RESULT` (`userid`,`reg_dt`) USING BTREE,
   KEY `reserve_dt_result_send_group` (`result`,`send_group`,`reserve_dt`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- kakao.DHN_RESULT_TEMP definition
 
@@ -302,7 +302,7 @@ CREATE TABLE `DHN_RESULT_TEMP` (
   KEY `userid_remark4_result` (`result`,`userid`,`remark4`) USING BTREE,
   KEY `result_sync_send_group` (`send_group`,`result`,`sync`) USING BTREE,
   KEY `IDX_DHN_RESULT` (`userid`,`reg_dt`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- kakao.DHN_RESULT_SUM definition
 
@@ -363,7 +363,7 @@ CREATE TABLE `KT_MMS` (
   `sep_seq` tinyint(4) DEFAULT NULL,
   `dhn_id` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`userid`,`msgid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- KT크로샷 SMS 발송용 KT_SMS 테이블
 
@@ -399,7 +399,7 @@ CREATE TABLE `KT_SMS` (
   `sep_seq` tinyint(4) DEFAULT NULL,
   `dhn_id` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`userid`,`msgid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- LG MMS (LMS) 발송용 LG_MMS_MSG 테이블
 
@@ -445,7 +445,7 @@ CREATE TABLE `LG_MMS_MSG` (
   KEY `LG_MMS_MSG_IDX2` (`STATUS`,`REQDATE`),
   KEY `LG_MMS_MSG_IDX3` (`PHONE`),
   KEY `LG_MMS_MSG_IDX4` (`REQDATE`,`RSLT`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- LG SMS 발송용 LG_SC_TRAN 테이블
 
@@ -476,7 +476,7 @@ CREATE TABLE `LG_SC_TRAN` (
   KEY `LG_SC_TRAN_IDX1` (`TR_SENDSTAT`,`TR_SENDDATE`),
   KEY `LG_SC_TRAN_IDX2` (`TR_PHONE`),
   KEY `LG_SC_TRAN_IDX3` (`TR_SENDDATE`,`TR_RSLTSTAT`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- MMS발송용 이미지용 api_mms_images 테이블
 
@@ -489,7 +489,7 @@ CREATE TABLE `api_mms_images` (
   `file1_path` text DEFAULT NULL,
   `file2_path` text DEFAULT NULL,
   `file3_path` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 불필요 문자 제거? 용 SPECIAL_CHARACTER 테이블
 
@@ -498,7 +498,7 @@ CREATE TABLE `SPECIAL_CHARACTER` (
   `dest_str` varchar(100) DEFAULT NULL,
   `enabled` varchar(1) NOT NULL DEFAULT 'Y',
   UNIQUE KEY `SPECIAL_CHARACTER_orgin_hex_code_IDX` (`orgin_hex_code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 문자체크 insert문
 
