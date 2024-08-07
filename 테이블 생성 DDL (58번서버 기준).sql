@@ -324,7 +324,7 @@ CREATE TABLE `DHN_RESULT_SUM` (
   `mmss_cnt` int(11) DEFAULT NULL,
   `mmse_cnt` int(11) DEFAULT NULL,
   UNIQUE KEY `DHN_RESULT_SUM_send_date_IDX` (`send_date`,`userid`,`depart`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='카카오 발송 결과 요약';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='카카오 발송 결과 요약';
 
 -- KT크로샷 MMS (LMS) 발송용 KT_MMS 테이블
 
