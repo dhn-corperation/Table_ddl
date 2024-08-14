@@ -108,7 +108,7 @@ new.price,
 new.currency_type,
 new.title,
 new.header,
-new.carousel,
+new.carousel
 ) ;
 	end if;
 END;
