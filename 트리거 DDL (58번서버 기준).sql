@@ -50,11 +50,8 @@ new.price,
 new.currency_type,
 new.title,
 new.header,
-new.carousel,
-NEW.attachments,
-NEW.user_key,
-NEW.response_method,
-NEW.timeout) ;
+new.carousel
+) ;
 	end if;
 	
 end;
@@ -112,9 +109,6 @@ new.currency_type,
 new.title,
 new.header,
 new.carousel,
-NEW.attachments,
-NEW.user_key,
-NEW.response_method,
-NEW.timeout) ;
+) ;
 	end if;
 END;
