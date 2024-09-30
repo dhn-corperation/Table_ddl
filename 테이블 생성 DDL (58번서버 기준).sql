@@ -11,12 +11,12 @@ CREATE TABLE `DHN_CLIENT_LIST` (
   `dest` varchar(100) DEFAULT NULL COMMENT '발송 목적지(OSHOT(NULL), NANO)',
   `alimtalk` varchar(1) DEFAULT NULL COMMENT '알림톡사용유무',
   `friendtalk` varchar(1) DEFAULT 'N' COMMENT '친구톡사용유무',
-  `second_send_flag` enum('Y','N') DEFAULT 'Y' COMMENT '2차 발송 플래그',
+  /* `second_send_flag` enum('Y','N') DEFAULT 'Y' COMMENT '2차 발송 플래그', */
   `crypto` varchar(255) DEFAULT NULL COMMENT '암호화 컬럼(구분자 , 공백없이)',
   `nano_tel_seperate` char(1) DEFAULT 'N' COMMENT '나노 010 분리 작업',
-  `pre_send_type` tinyint(4) DEFAULT 0 COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때 전 발송 플랫폼(0 : 에이전트 가동 후 변경X, 1 : oshot, 2 : nano)',
+  /* `pre_send_type` tinyint(4) DEFAULT 0 COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때 전 발송 플랫폼(0 : 에이전트 가동 후 변경X, 1 : oshot, 2 : nano)',
   `pre_update_date` timestamp NULL DEFAULT NULL COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때의 시간',
-  `description` varchar(500) DEFAULT NULL COMMENT '업체에 대한 설명 및 비고란'
+  `description` varchar(500) DEFAULT NULL COMMENT '업체에 대한 설명 및 비고란' */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 친구톡 발송용 DHN_REQUEST 테이블
@@ -63,6 +63,7 @@ CREATE TABLE `DHN_REQUEST` (
   `carousel` longtext DEFAULT NULL,
   `att_items` text DEFAULT NULL,
   `att_coupon` text DEFAULT NULL,
+  `mms_image_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
@@ -111,6 +112,7 @@ CREATE TABLE `DHN_REQUEST_AT` (
   `title` varchar(50) DEFAULT NULL,
   `header` varchar(100) DEFAULT NULL,
   `carousel` text DEFAULT NULL,
+  `mms_image_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
   KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
@@ -165,6 +167,7 @@ CREATE TABLE `DHN_RESULT` (
   `title` varchar(50) DEFAULT NULL,
   `header` varchar(50) DEFAULT NULL,
   `carousel` text DEFAULT NULL,
+  `mms_image_id` varchar(100) DEFAULT NULL,
   UNIQUE KEY `DHN_RESULT_userid_IDX` (`userid`,`msgid`) USING BTREE,
   KEY `userid_result_sync` (`userid`,`sync`,`result`) USING BTREE,
   KEY `only_sms_result` (`result`,`only_sms`) USING BTREE,
@@ -221,6 +224,7 @@ CREATE TABLE `DHN_RESULT_TEMP` (
   `title` varchar(50) DEFAULT NULL,
   `header` varchar(50) DEFAULT NULL,
   `carousel` longtext DEFAULT NULL,
+  `mms_image_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`msgid`) USING BTREE,
   KEY `userid_result_sync` (`userid`,`sync`,`result`) USING BTREE,
   KEY `only_sms_result` (`result`,`only_sms`) USING BTREE,
