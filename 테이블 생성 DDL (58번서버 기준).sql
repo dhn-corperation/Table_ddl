@@ -12,7 +12,7 @@ CREATE TABLE `DHN_CLIENT_LIST` (
   `alimtalk` varchar(1) DEFAULT NULL COMMENT '알림톡사용유무',
   `friendtalk` varchar(1) DEFAULT 'N' COMMENT '친구톡사용유무',
   /* `second_send_flag` enum('Y','N') DEFAULT 'Y' COMMENT '2차 발송 플래그', */
-  `crypto` varchar(255) DEFAULT NULL COMMENT '암호화 컬럼(구분자 , 공백없이)',
+  /* `crypto` varchar(255) DEFAULT NULL COMMENT '암호화 컬럼(구분자 , 공백없이)', */
   `nano_tel_seperate` char(1) DEFAULT 'N' COMMENT '나노 010 분리 작업',
   /* `pre_send_type` tinyint(4) DEFAULT 0 COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때 전 발송 플랫폼(0 : 에이전트 가동 후 변경X, 1 : oshot, 2 : nano)',
   `pre_update_date` timestamp NULL DEFAULT NULL COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때의 시간',
