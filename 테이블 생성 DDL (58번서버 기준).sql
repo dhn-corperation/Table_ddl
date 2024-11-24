@@ -4,7 +4,7 @@ CREATE TABLE `DHN_CLIENT_LIST` (
   `user_id` varchar(50) DEFAULT NULL,
   `ip` varchar(50) DEFAULT NULL,
   `use_flag` char(1) DEFAULT NULL,
-  `port` char(5) NOT NULL DEFAULT '9090',
+  /* `port` char(5) NOT NULL DEFAULT '9090' */
   `send_limit` varchar(50) DEFAULT NULL,
   `sms_len_check` char(1) DEFAULT 'N',
   `oshot` varchar(100) NOT NULL DEFAULT 'OShot' COMMENT 'oshot 발송 삽입 테이블',
@@ -15,8 +15,8 @@ CREATE TABLE `DHN_CLIENT_LIST` (
   /* `crypto` varchar(255) DEFAULT NULL COMMENT '암호화 컬럼(구분자 , 공백없이)', */
   `nano_tel_seperate` char(1) DEFAULT 'N' COMMENT '나노 010 분리 작업',
   /* `pre_send_type` tinyint(4) DEFAULT 0 COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때 전 발송 플랫폼(0 : 에이전트 가동 후 변경X, 1 : oshot, 2 : nano)',
-  `pre_update_date` timestamp NULL DEFAULT NULL COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때의 시간',
-  `description` varchar(500) DEFAULT NULL COMMENT '업체에 대한 설명 및 비고란' */
+  `pre_update_date` timestamp NULL DEFAULT NULL COMMENT 'API를 이용한 문자발송 플랫폼 전환 했을 때의 시간', */
+  `description` varchar(500) DEFAULT NULL COMMENT '업체에 대한 설명 및 비고란'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 친구톡 발송용 DHN_REQUEST 테이블
