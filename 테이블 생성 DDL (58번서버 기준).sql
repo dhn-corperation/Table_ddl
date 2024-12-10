@@ -1,3 +1,13 @@
+-- 메시지 수신 테이블
+
+CREATE TABLE `DHN_RECEPTION` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '아이디',
+  `msgid` varchar(20) DEFAULT NULL COMMENT '메시지 ID',
+  `userid` varchar(20) DEFAULT NULL COMMENT '유저 ID',
+  `insert_date` timestamp NULL DEFAULT current_timestamp() COMMENT '삽입 날짜',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='수신 테이블';
+
 -- 발송계정 세팅용 DHN_CLIENT_LIST 테이블
 
 CREATE TABLE `DHN_CLIENT_LIST` (
