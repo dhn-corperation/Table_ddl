@@ -157,7 +157,7 @@ CREATE TABLE `DHN_RESULT` (
   `reg_dt` varchar(20) NOT NULL,
   `remark1` varchar(50) DEFAULT NULL COMMENT '문자 수신 통신사',
   `remark2` varchar(50) DEFAULT NULL COMMENT '문자 발송 시간',
-  `remark3` varchar(50) DEFAULT NULL,
+  `remark3` varchar(50) DEFAULT NULL COMMENT '1: 친구톡, 2: 알림톡',
   `remark4` varchar(50) DEFAULT NULL,
   `remark5` varchar(50) DEFAULT NULL,
   `res_dt` varchar(20) DEFAULT NULL,
