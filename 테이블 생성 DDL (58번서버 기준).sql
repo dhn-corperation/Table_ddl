@@ -182,6 +182,8 @@ CREATE TABLE `DHN_RESULT` (
   `attachments` text DEFAULT NULL,
   `link` text DEFAULT NULL,
   `mms_image_id` varchar(100) DEFAULT NULL,
+  `att_items` text DEFAULT NULL,
+  `att_coupon` text DEFAULT NULL,
   UNIQUE KEY `DHN_RESULT_userid_IDX` (`userid`,`msgid`) USING BTREE,
   KEY `userid_result_sync` (`userid`,`sync`,`result`) USING BTREE,
   KEY `only_sms_result` (`result`,`only_sms`) USING BTREE,
