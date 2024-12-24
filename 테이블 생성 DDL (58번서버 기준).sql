@@ -64,7 +64,7 @@ CREATE TABLE `DHN_REQUEST` (
   `s_code` varchar(2) DEFAULT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` char(15) DEFAULT NULL,
+  `send_group` char(20) DEFAULT NULL,
   `supplement` text DEFAULT NULL,
   `price` int(11) DEFAULT 0,
   `currency_type` char(3) DEFAULT NULL,
@@ -77,7 +77,8 @@ CREATE TABLE `DHN_REQUEST` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE
+  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
+  KEY `DHN_REQUEST_userid_IDX` (`userid`,`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 알림톡 발송용 DHN_REQUEST_AT 테이블
@@ -115,7 +116,7 @@ CREATE TABLE `DHN_REQUEST_AT` (
   `s_code` varchar(2) DEFAULT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` char(15) DEFAULT NULL,
+  `send_group` char(20) DEFAULT NULL,
   `supplement` mediumtext DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
   `currency_type` char(3) DEFAULT NULL,
@@ -129,7 +130,8 @@ CREATE TABLE `DHN_REQUEST_AT` (
   KEY `msgid` (`msgid`) USING BTREE,
   KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE
+  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE,
+  KEY `DHN_REQUEST_AT_userid_IDX` (`userid`,`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 문자발송 및 비즈메시지 결과저장용 DHN_RESULT 테이블
@@ -172,7 +174,7 @@ CREATE TABLE `DHN_RESULT` (
   `sync` varchar(1) NOT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` varchar(14) DEFAULT NULL,
+  `send_group` varchar(20) DEFAULT NULL,
   `supplement` text DEFAULT NULL,
   `price` int(11) DEFAULT 0,
   `currency_type` char(3) DEFAULT NULL,
@@ -233,7 +235,7 @@ CREATE TABLE `DHN_RESULT_TEMP` (
   `sync` varchar(1) NOT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` varchar(14) DEFAULT NULL,
+  `send_group` varchar(20) DEFAULT NULL,
   `supplement` text DEFAULT NULL,
   `price` int(11) DEFAULT 0,
   `currency_type` char(3) DEFAULT NULL,
@@ -896,7 +898,7 @@ CREATE TABLE `DHN_REQUEST_AT_RESEND` (
   `s_code` varchar(2) DEFAULT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` char(15) DEFAULT NULL,
+  `send_group` char(20) DEFAULT NULL,
   `supplement` mediumtext DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
   `currency_type` char(3) DEFAULT NULL,
@@ -911,7 +913,8 @@ CREATE TABLE `DHN_REQUEST_AT_RESEND` (
   KEY `msgid` (`msgid`) USING BTREE,
   KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE
+  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE,
+  KEY `DHN_REQUEST_AT_userid_IDX` (`userid`,`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 친구톡 9999 에러 재발송 테이블
@@ -949,7 +952,7 @@ CREATE TABLE `DHN_REQUEST_RESEND` (
   `s_code` varchar(2) DEFAULT NULL,
   `tmpl_id` varchar(30) DEFAULT NULL,
   `wide` varchar(1) DEFAULT NULL,
-  `send_group` char(15) DEFAULT NULL,
+  `send_group` char(20) DEFAULT NULL,
   `supplement` text DEFAULT NULL,
   `price` int(11) DEFAULT 0,
   `currency_type` char(3) DEFAULT NULL,
@@ -964,7 +967,8 @@ CREATE TABLE `DHN_REQUEST_RESEND` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `send_group` (`send_group`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE
+  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
+  KEY `DHN_REQUEST_userid_IDX` (`userid`,`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 통계 테이블
