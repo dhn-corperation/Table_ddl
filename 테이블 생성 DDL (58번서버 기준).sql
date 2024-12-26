@@ -5,7 +5,8 @@ CREATE TABLE `DHN_RECEPTION` (
   `msgid` varchar(20) DEFAULT NULL COMMENT '메시지 ID',
   `userid` varchar(20) DEFAULT NULL COMMENT '유저 ID',
   `insert_date` timestamp NULL DEFAULT current_timestamp() COMMENT '삽입 날짜',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `DHN_RECEPTION_msgid_IDX` (`msgid`,`userid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='수신 테이블';
 
 -- 발송계정 세팅용 DHN_CLIENT_LIST 테이블
