@@ -77,9 +77,8 @@ CREATE TABLE `DHN_REQUEST` (
   `mms_image_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
-  KEY `DHN_REQUEST_userid_IDX` (`userid`,`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_send_group_IDX` (`send_group`,`userid`,`reserve_dt`) USING BTREE
+  KEY `send_group` (`send_group`) USING BTREE,
+  KEY `DHN_REQUEST_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 알림톡 발송용 DHN_REQUEST_AT 테이블
@@ -129,9 +128,8 @@ CREATE TABLE `DHN_REQUEST_AT` (
   `mms_image_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
-  KEY `DHN_REQUEST_AT_userid_IDX` (`userid`,`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`userid`,`reserve_dt`) USING BTREE
+  KEY `send_group` (`send_group`) USING BTREE,
+  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`reserve_dt`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 문자발송 및 비즈메시지 결과저장용 DHN_RESULT 테이블
@@ -913,9 +911,7 @@ CREATE TABLE `DHN_REQUEST_AT_RESEND` (
   `real_msgid` varchar(32) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
-  KEY `DHN_REQUEST_AT_userid_IDX` (`userid`,`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_AT_send_group_IDX` (`send_group`,`userid`) USING BTREE
+  KEY `send_group` (`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 친구톡 9999 에러 재발송 테이블
@@ -967,9 +963,7 @@ CREATE TABLE `DHN_REQUEST_RESEND` (
   `real_msgid` varchar(32) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   KEY `msgid` (`msgid`) USING BTREE,
-  KEY `IDX_DHN_REQUEST` (`reg_dt`,`userid`) USING BTREE,
-  KEY `DHN_REQUEST_userid_IDX` (`userid`,`send_group`) USING BTREE,
-  KEY `DHN_REQUEST_send_group_IDX` (`send_group`,`userid`) USING BTREE
+  KEY `send_group` (`send_group`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 통계 테이블
