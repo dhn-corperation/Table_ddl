@@ -194,6 +194,61 @@ CREATE TABLE `DHN_RESULT` (
   KEY `userid_result_send_group` (`userid`,`result`,`send_group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- DHN_RESULT 백업을 위한 테이블
+
+CREATE TABLE `DHN_RESULT_BK_TEMP` (
+  `msgid` varchar(32) NOT NULL,
+  `userid` varchar(20) NOT NULL,
+  `ad_flag` varchar(1) DEFAULT NULL,
+  `button1` longtext DEFAULT NULL,
+  `button2` longtext DEFAULT NULL,
+  `button3` longtext DEFAULT NULL,
+  `button4` longtext DEFAULT NULL,
+  `button5` longtext DEFAULT NULL,
+  `code` varchar(4) DEFAULT NULL,
+  `image_link` longtext DEFAULT NULL,
+  `image_url` longtext DEFAULT NULL,
+  `kind` varchar(1) DEFAULT NULL,
+  `message` longtext DEFAULT NULL COMMENT '결과값 메시지(1차로 알림톡 2차로 문자를 보낼 시 2차 문자 결과값에 대한 메시지가 들어간다)',
+  `message_type` varchar(2) DEFAULT NULL COMMENT '문자발송 타입(1차로 알림톡 2차로 문자를 보낼 시 2차 문자 타입인 PH가 적히게 된다)',
+  `msg` longtext NOT NULL COMMENT '발송 결과값 메시지(1차로 알림톡 2차로 문자를 보낼 시 2차 문자의 결과값이 들어간다.)',
+  `msg_sms` longtext DEFAULT NULL,
+  `only_sms` varchar(1) DEFAULT NULL,
+  `p_com` varchar(2) DEFAULT NULL,
+  `p_invoice` varchar(100) DEFAULT NULL,
+  `phn` varchar(15) NOT NULL,
+  `profile` varchar(50) DEFAULT NULL,
+  `reg_dt` varchar(20) NOT NULL,
+  `remark1` varchar(50) DEFAULT NULL COMMENT '문자 수신 통신사',
+  `remark2` varchar(50) DEFAULT NULL COMMENT '문자 발송 시간',
+  `remark3` varchar(50) DEFAULT NULL COMMENT '1: 친구톡, 2: 알림톡',
+  `remark4` varchar(50) DEFAULT NULL,
+  `remark5` varchar(50) DEFAULT NULL,
+  `res_dt` varchar(20) DEFAULT NULL,
+  `reserve_dt` varchar(14) NOT NULL,
+  `result` varchar(1) DEFAULT NULL,
+  `s_code` varchar(4) DEFAULT NULL,
+  `sms_kind` varchar(1) DEFAULT NULL,
+  `sms_lms_tit` varchar(120) DEFAULT NULL,
+  `sms_sender` varchar(15) DEFAULT NULL,
+  `sync` varchar(1) NOT NULL,
+  `tmpl_id` varchar(30) DEFAULT NULL,
+  `wide` varchar(1) DEFAULT NULL,
+  `send_group` varchar(20) DEFAULT NULL,
+  `supplement` text DEFAULT NULL,
+  `price` int(11) DEFAULT 0,
+  `currency_type` char(3) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `header` varchar(50) DEFAULT NULL,
+  `carousel` text DEFAULT NULL,
+  `attachments` text DEFAULT NULL,
+  `link` text DEFAULT NULL,
+  `mms_image_id` varchar(100) DEFAULT NULL,
+  `att_items` text DEFAULT NULL,
+  `att_coupon` text DEFAULT NULL,
+  KEY `IDX_DHN_RESULT` (`userid`,`reg_dt`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- kakao.DHN_RESULT_TEMP definition
 
 CREATE TABLE `DHN_RESULT_TEMP` (
