@@ -72,6 +72,7 @@ CREATE TABLE `DHN_REQUEST` (
   `title` varchar(50) DEFAULT NULL,
   `header` varchar(100) DEFAULT NULL,
   `carousel` longtext DEFAULT NULL,
+  `attachments` text DEFAULT NULL,
   `att_items` text DEFAULT NULL,
   `att_coupon` text DEFAULT NULL,
   `mms_image_id` varchar(100) DEFAULT NULL,
