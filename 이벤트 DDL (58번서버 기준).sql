@@ -1,8 +1,17 @@
--- Result_BK_EVENT
-
-CREATE EVENT Result_BK_EVENT
+CREATE EVENT dhn_result_bk_event
 ON SCHEDULE EVERY 1 DAY
-STARTS '2023-09-22 12:00:00.000'
+STARTS '2023-10-28 00:20:00.000'
 ON COMPLETION NOT PRESERVE
-DISABLE
-DO CALL result_backup;
+ENABLE
+DO CALL kakao5.dhn_result_back_proc(20)
+
+CREATE EVENT event_result_sata_proc
+ON SCHEDULE EVERY 1 DAY
+STARTS '2024-04-28 00:50:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+    DECLARE previous_date VARCHAR(8);
+    SET previous_date = DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), '%Y%m%d');
+    CALL kakao5.result_sata_proc(previous_date);
+END
