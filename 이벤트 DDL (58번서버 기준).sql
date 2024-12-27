@@ -3,7 +3,7 @@ ON SCHEDULE EVERY 1 DAY
 STARTS '2023-10-28 00:20:00.000'
 ON COMPLETION NOT PRESERVE
 ENABLE
-DO CALL kakao5.dhn_result_back_proc(20)
+DO CALL dhn_result_back_proc(20)
 
 CREATE EVENT event_result_sata_proc
 ON SCHEDULE EVERY 1 DAY
@@ -13,5 +13,5 @@ ENABLE
 DO BEGIN
     DECLARE previous_date VARCHAR(8);
     SET previous_date = DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), '%Y%m%d');
-    CALL kakao5.result_sata_proc(previous_date);
+    CALL result_sata_proc(previous_date);
 END
