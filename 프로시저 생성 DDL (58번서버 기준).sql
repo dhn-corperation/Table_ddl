@@ -25,7 +25,7 @@ BEGIN
                 leave ul_loop;
         end if;
 
-		set @insert_query = CONCAT( 'insert ignore into DHN_RESULT_BK_TEMP select * from DHN_RESULT_PROC where reg_dt <= DATE_FORMAT( date_sub( now(), INTERVAL  ',p_interval,' day), ''%Y-%m-%d %T'') and userid =''', v_userid, '''' )  ;
+		set @insert_query = CONCAT( 'insert ignore into DHN_RESULT_BK_TEMP select * from DHN_RESULT where reg_dt <= DATE_FORMAT( date_sub( now(), INTERVAL  ',p_interval,' minute), ''%Y-%m-%d %T'') and userid =''', v_userid, ''' and sync = ''Y'' ');
 		
 		prepare stmt from @insert_query;
 		execute stmt;
@@ -52,12 +52,12 @@ BEGIN
   				    leave ins_loop;
   				end if;
 			
-  			    set @ins_query = CONCAT('insert ignore into ', 'DHN_RESULT_', v_tbl_dt, ' select * from DHN_RESULT_BK_TEMP where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' and sync = ''Y''');
+  			    set @ins_query = CONCAT('insert ignore into ', 'DHN_RESULT_', v_tbl_dt, ' select * from DHN_RESULT_BK_TEMP where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' ');
 				prepare stmt from @ins_query;
 				execute stmt;
 				deallocate prepare stmt;	
 			
-				set @ud_query = CONCAT('update DHN_RESULT_BK_TEMP set sync=''C'' where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' and sync = ''Y''');
+				set @ud_query = CONCAT('update DHN_RESULT_BK_TEMP set sync=''C'' where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' ');
 				prepare stmt from @ud_query;
 				execute stmt;
 				deallocate prepare stmt;	
@@ -88,8 +88,6 @@ BEGIN
 						close c_result_list;
 						leave rl_loop;
 					end if;
-			
-				delete from DHN_RESULT_PROC where userid = v_userid and msgid = v_msgid;
 	
 				delete from DHN_RESULT where userid = v_userid and msgid = v_msgid;
 	
