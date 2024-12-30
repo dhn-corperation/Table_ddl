@@ -309,28 +309,6 @@ CREATE TABLE `DHN_RESULT_TEMP` (
   KEY `IDX_DHN_RESULT` (`userid`,`reg_dt`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- kakao.DHN_RESULT_SUM definition
-
-CREATE TABLE `DHN_RESULT_SUM` (
-  `send_date` varchar(255) NOT NULL,
-  `userid` varchar(255) NOT NULL,
-  `depart` varchar(100) DEFAULT NULL,
-  `send_cnt` decimal(10,0) DEFAULT NULL,
-  `ats_cnt` decimal(10,0) DEFAULT NULL,
-  `ate_cnt` decimal(10,0) DEFAULT NULL,
-  `fts_cnt` decimal(10,0) DEFAULT NULL,
-  `fte_cnt` decimal(10,0) DEFAULT NULL,
-  `ftis_cnt` decimal(10,0) DEFAULT NULL,
-  `ftie_cnt` decimal(10,0) DEFAULT NULL,
-  `ftws_cnt` decimal(10,0) DEFAULT NULL,
-  `ftwe_cnt` decimal(10,0) DEFAULT NULL,
-  `smss_cnt` int(11) DEFAULT NULL,
-  `smse_cnt` int(11) DEFAULT NULL,
-  `mmss_cnt` int(11) DEFAULT NULL,
-  `mmse_cnt` int(11) DEFAULT NULL,
-  UNIQUE KEY `DHN_RESULT_SUM_send_date_IDX` (`send_date`,`userid`,`depart`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='카카오 발송 결과 요약';
-
 -- KT크로샷 MMS (LMS) 발송용 KT_MMS 테이블
 
 CREATE TABLE `KT_MMS` (
