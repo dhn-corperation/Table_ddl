@@ -135,169 +135,159 @@ BEGIN
     return v_msg;
 END;
 
--- DHN_RESULT 테이블 백업용 result_backup 프로시저
 
-CREATE DEFINER=`root`@`%` PROCEDURE `result_backup`()
+CREATE DEFINER=`root`@`%` PROCEDURE `result_sata_proc`(IN p_date VARCHAR(8))
 BEGIN
-	declare v_userid varchar(20);
-	DECLARE v_ul_done INT DEFAULT FALSE;
+    DECLARE v_userid VARCHAR(20);
+    DECLARE v_ul_done INT DEFAULT FALSE;
+    DECLARE v_table_name VARCHAR(50);
+    DECLARE v_last_month VARCHAR(50);
+    DECLARE v_pre_table_name VARCHAR(50);
 
-	declare user_list cursor for
-		select distinct user_id from DHN_CLIENT_LIST dcl where dcl.use_flag  = 'Y';
-	
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_ul_done = TRUE;
+    DECLARE user_list CURSOR FOR
+        SELECT DISTINCT user_id FROM DHN_CLIENT_LIST dcl WHERE dcl.use_flag = 'Y';
 
-	open user_list;
-	ul_loop: LOOP
-		fetch user_list into v_userid;
-		if v_ul_done then 
-			close user_list;
-			leave ul_loop;
-		end if;
-		
-		RES_BLOCK:
-		begin
-			DECLARE v_res_done INT DEFAULT FALSE;
-			DECLARE v_ruserid varchar(20);
-			DECLARE v_depart varchar(20);
-			DECLARE v_send_date varchar(20);
-			DECLARE v_send_cnt int;
-			DECLARE v_ats_cnt int;
-			DECLARE v_ate_cnt int;
-			DECLARE v_fts_cnt int;
-			DECLARE v_fte_cnt int;
-			DECLARE v_ftis_cnt int;
-			DECLARE v_ftie_cnt int;
-			DECLARE v_ftws_cnt int;
-			DECLARE v_ftwe_cnt int;
-			DECLARE v_smss_cnt int;
-			DECLARE v_smse_cnt int;
-			DECLARE v_mmss_cnt int;
-			DECLARE v_mmse_cnt int;
-		
-			declare res cursor(p_user varchar(20)) for
-				select userid
-				      ,ifnull(dr.p_invoice, '_') as depart
-				      ,count(1) as send_cnt
-				      ,substr(dr.reg_dt, 1, 10) as send_date
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type in ('at', 'ai') then
-				              1
-				             else
-				              0
-				           end) as ats_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type in ('at', 'ai') then
-				              1
-				             else
-				              0
-				           end) as ate_cnt
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type = 'ft' and
-				                  dr.image_url is null then
-				              1
-				             else
-				              0
-				           end) as fts_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type = 'ft' and
-				                  dr.image_url is null then
-				              1
-				             else
-				              0
-				           end) as fte_cnt
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type = 'ft' and
-				                  dr.image_url is not null and dr.wide = 'N' then
-				              1
-				             else
-				              0
-				           end) as ftis_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type = 'ft' and
-				                  dr.image_url is not null and dr.wide = 'N' then
-				              1
-				             else
-				              0
-				           end) as ftie_cnt
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type = 'ft' and dr.wide = 'Y' then
-				              1
-				             else
-				              0
-				           end) as ftws_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type = 'ft' and dr.wide = 'Y' then
-				              1
-				             else
-				              0
-				           end) as ftwe_cnt
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type = 'ph' and dr.sms_kind = 'S' then
-				              1
-				             else
-				              0
-				           end) as smss_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type = 'ph' and dr.sms_kind = 'S' then
-				              1
-				             else
-				              0
-				           end) as smse_cnt
-				      ,sum(case
-				             when dr.code = '0000' and dr.message_type = 'ph' and dr.sms_kind = 'L' then
-				              1
-				             else
-				              0
-				           end) as mmss_cnt
-				      ,sum(case
-				             when dr.code <> '0000' and dr.message_type = 'ph' and dr.sms_kind = 'L' then
-				              1
-				             else
-				              0
-				           end) as mmse_cnt
-				  from DHN_RESULT dr
-				 where dr.reg_dt < DATE_FORMAT(now(), '%Y-%m-%d') 
-				   and userid = p_user
-				   and dr.sync  = 'Y'
-				 group by userid
-				         ,p_invoice
-				         ,substr(dr.reg_dt, 1, 10);
-		
-			DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_res_done = TRUE;
-			 			
-			open res(v_userid );
-			res_loop: 
-			Loop
-				fetch res into v_ruserid 
-							  ,v_depart 
-							  ,v_send_cnt
-							  ,v_send_date 
-							  ,v_ats_cnt
-							  ,v_ate_cnt
-							  ,v_fts_cnt
-							  ,v_fte_cnt
-							  ,v_ftis_cnt
-							  ,v_ftie_cnt
-							  ,v_ftws_cnt
-							  ,v_ftwe_cnt
-							  ,v_smss_cnt
-							  ,v_smse_cnt
-							  ,v_mmss_cnt
-							  ,v_mmse_cnt;
-				if v_res_done then 
-					close res;
-					leave res_loop;
-				end if;
-	
-				delete from kakao.DHN_RESULT_SUM where send_date = v_send_date and userid = v_ruserid and depart = v_depart;
-			
-				INSERT INTO kakao.DHN_RESULT_SUM
-				(send_date, userid, depart, send_cnt, ats_cnt, ate_cnt, fts_cnt, fte_cnt, ftis_cnt, ftie_cnt, ftws_cnt, ftwe_cnt, smss_cnt, smse_cnt, mmss_cnt, mmse_cnt)
-				VALUES(v_send_date, v_ruserid, v_depart,  v_send_cnt, v_ats_cnt, v_ate_cnt, v_fts_cnt, v_fte_cnt, v_ftis_cnt, v_ftie_cnt, v_ftws_cnt, v_ftwe_cnt, v_smss_cnt, v_smse_cnt, v_mmss_cnt, v_mmse_cnt);		
-			END LOOP res_loop;
-		END RES_BLOCK;
-	END LOOP ul_loop;
-	
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_ul_done = TRUE;
 
-END;
+    OPEN user_list;
+    ul_loop: LOOP
+        FETCH user_list INTO v_userid;
+        IF v_ul_done THEN
+            -- CLOSE user_list;
+            -- SELECT 'ul_loop END' AS text;
+            LEAVE ul_loop;
+        END IF;
+
+    	 SELECT v_userid AS userid;
+        -- 테이블 이름을 동적으로 생성
+        SET v_table_name = CONCAT('DHN_RESULT_', LEFT(p_date, 6));
+        SET v_last_month = DATE_FORMAT(STR_TO_DATE(CONCAT(SUBSTRING(p_date, 1, 6), '01'), '%Y%m%d') - INTERVAL 1 MONTH, '%Y%m');
+        SET v_pre_table_name = CONCAT('DHN_RESULT_', v_last_month);
+
+        -- 기존 임시 테이블 삭제
+        DROP TEMPORARY TABLE IF EXISTS tmp_result;
+
+        -- 동적 쿼리 생성 및 임시 테이블에 결과 저장
+        SET @query = CONCAT('CREATE TEMPORARY TABLE tmp_result AS ',
+                            'SELECT userid, ', 
+                            'p_invoice AS depart, ',
+                            'COUNT(1) AS send_cnt, ',
+                            'SUBSTR(dr.reg_dt, 1, 10) AS send_date, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 2 THEN 1 ELSE 0 END) AS ats_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 2 THEN 1 ELSE 0 END) AS ate_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NULL THEN 1 ELSE 0 END) AS fts_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NULL THEN 1 ELSE 0 END) AS fte_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NOT NULL AND dr.wide = ''N'' THEN 1 ELSE 0 END) AS ftis_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NOT NULL AND dr.wide = ''N'' THEN 1 ELSE 0 END) AS ftie_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.wide = ''Y'' THEN 1 ELSE 0 END) AS ftws_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.wide = ''Y'' THEN 1 ELSE 0 END) AS ftwe_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''s'' THEN 1 ELSE 0 END) AS smss_cnt, ',
+                            '0 AS smsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''s'' THEN 1 ELSE 0 END) AS smse_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''l'' THEN 1 ELSE 0 END) AS lmss_cnt, ',
+                            '0 AS lmsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''l'' THEN 1 ELSE 0 END) AS lmse_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''m'' THEN 1 ELSE 0 END) AS mmss_cnt, ',
+                            '0 AS mmsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''m'' THEN 1 ELSE 0 END) AS mmse_cnt ',
+                            'FROM ', v_pre_table_name, ' dr ',
+                            'WHERE userid = ''', v_userid, ''' ',
+                            'AND dr.reg_dt BETWEEN DATE_SUB(STR_TO_DATE(''', p_date, ''', ''%Y%m%d''), INTERVAL 5 DAY) AND DATE_ADD(STR_TO_DATE(''', p_date, ''', ''%Y%m%d''), INTERVAL 1 DAY) ',
+                            'GROUP BY userid, p_invoice, SUBSTR(dr.reg_dt, 1, 10) ',
+                            'UNION ALL ',
+                            'SELECT userid, ', 
+                            'p_invoice AS depart, ',
+                            'COUNT(1) AS send_cnt, ',
+                            'SUBSTR(dr.reg_dt, 1, 10) AS send_date, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 2 THEN 1 ELSE 0 END) AS ats_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 2 THEN 1 ELSE 0 END) AS ate_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NULL THEN 1 ELSE 0 END) AS fts_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NULL THEN 1 ELSE 0 END) AS fte_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NOT NULL AND dr.wide = ''N'' THEN 1 ELSE 0 END) AS ftis_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.image_url IS NOT NULL AND dr.wide = ''N'' THEN 1 ELSE 0 END) AS ftie_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND dr.remark3 = 1 AND dr.wide = ''Y'' THEN 1 ELSE 0 END) AS ftws_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND dr.remark3 = 1 AND dr.wide = ''Y'' THEN 1 ELSE 0 END) AS ftwe_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''s'' THEN 1 ELSE 0 END) AS smss_cnt, ',
+                            '(SELECT COUNT(1) FROM DHN_RESULT a WHERE userid=dr.userid AND a.p_invoice=dr.p_invoice AND a.result = ''P'' AND lower(a.sms_kind) = ''s'' AND SUBSTR(a.res_dt, 1, 10) = SUBSTR(dr.res_dt, 1, 10)) AS smsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''s'' THEN 1 ELSE 0 END) AS smse_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''l'' THEN 1 ELSE 0 END) AS lmss_cnt, ',
+                            '(SELECT COUNT(1) FROM DHN_RESULT a WHERE userid=dr.userid AND a.p_invoice=dr.p_invoice AND a.result = ''P'' AND lower(a.sms_kind) = ''l'' AND SUBSTR(a.res_dt, 1, 10) = SUBSTR(dr.res_dt, 1, 10)) AS lmsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''l'' THEN 1 ELSE 0 END) AS lmse_cnt, ',
+                            'SUM(CASE WHEN dr.s_code = ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''m'' THEN 1 ELSE 0 END) AS mmss_cnt, ',
+                            '(SELECT COUNT(1) FROM DHN_RESULT a WHERE userid=dr.userid AND a.p_invoice=dr.p_invoice AND a.result = ''P'' AND lower(a.sms_kind) = ''m'' AND SUBSTR(a.res_dt, 1, 10) = SUBSTR(dr.res_dt, 1, 10)) AS mmsd_cnt, ',
+                            'SUM(CASE WHEN dr.s_code <> ''0000'' AND lower(dr.message_type) = ''ph'' AND lower(dr.sms_kind) = ''m'' THEN 1 ELSE 0 END) AS mmse_cnt ',
+                            'FROM ', v_table_name, ' dr ',
+                            'WHERE userid = ''', v_userid, ''' AND dr.sync = ''Y'' ',
+                            'AND dr.reg_dt BETWEEN DATE_SUB(STR_TO_DATE(''', p_date, ''', ''%Y%m%d''), INTERVAL 5 DAY) AND DATE_ADD(STR_TO_DATE(''', p_date, ''', ''%Y%m%d''), INTERVAL 1 DAY) ',
+                            'GROUP BY userid, p_invoice, SUBSTR(dr.reg_dt, 1, 10)');
+
+        -- SELECT @query;
+        PREPARE stmt FROM @query;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
+        -- 블록 내에서 필요한 변수와 커서 및 핸들러 선언
+        BEGIN
+            DECLARE v_res_done INT DEFAULT FALSE;
+            DECLARE v_ruserid VARCHAR(20);
+            DECLARE v_depart VARCHAR(24);
+            DECLARE v_send_date VARCHAR(20);
+            DECLARE v_send_cnt INT;
+            DECLARE v_ats_cnt INT;
+            DECLARE v_ate_cnt INT;
+            DECLARE v_fts_cnt INT;
+            DECLARE v_fte_cnt INT;
+            DECLARE v_ftis_cnt INT;
+            DECLARE v_ftie_cnt INT;
+            DECLARE v_ftws_cnt INT;
+            DECLARE v_ftwe_cnt INT;
+            DECLARE v_smss_cnt INT;
+            DECLARE v_smsd_cnt INT;
+            DECLARE v_smse_cnt INT;
+            DECLARE v_lmss_cnt INT;
+            DECLARE v_lmsd_cnt INT;
+            DECLARE v_lmse_cnt INT;
+            DECLARE v_mmss_cnt INT;
+            DECLARE v_mmsd_cnt INT;
+            DECLARE v_mmse_cnt INT;
+
+            DECLARE res CURSOR FOR
+                SELECT userid, depart, send_date, sum(send_cnt) AS send_cnt, sum(ats_cnt) AS ats_cnt, sum(ate_cnt) AS ate_cnt, 
+                	     sum(fts_cnt) AS fts_cnt, sum(fte_cnt) AS fte_cnt, sum(ftis_cnt) AS ftis_cnt, sum(ftie_cnt) AS ftie_cnt, 
+                	     sum(ftws_cnt) AS ftws_cnt, sum(ftwe_cnt) AS ftwe_cnt, sum(smss_cnt) AS smss_cnt, sum(smsd_cnt) AS smsd_cnt, 
+                	     sum(smse_cnt) AS smse_cnt, sum(lmss_cnt) AS lmss_cnt, sum(lmsd_cnt) AS lmsd_cnt, 
+                	     sum(lmse_cnt) AS lmse_cnt, sum(mmss_cnt) AS mmss_cnt, sum(mmsd_cnt) AS mmsd_cnt, sum(mmse_cnt) AS mmse_cnt
+                FROM tmp_result GROUP BY userid, depart, send_date;
+
+            DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_res_done = TRUE;
+
+            OPEN res;
+            res_loop: LOOP
+                FETCH res INTO v_ruserid, v_depart, v_send_date, v_send_cnt, v_ats_cnt, v_ate_cnt, 
+                              v_fts_cnt, v_fte_cnt, v_ftis_cnt, v_ftie_cnt, v_ftws_cnt, v_ftwe_cnt, 
+                              v_smss_cnt, v_smsd_cnt, v_smse_cnt, v_lmss_cnt, v_lmsd_cnt, v_lmse_cnt, v_mmss_cnt, v_mmsd_cnt, v_mmse_cnt;
+                IF v_res_done THEN
+                	  -- SELECT 'res_loop END' AS text;
+                    LEAVE res_loop;
+                END IF;
+
+                -- SELECT v_ruserid AS userid, v_depart AS depart;
+                -- SELECT 'DELECT' as text;
+                DELETE FROM DHN_RESULT_STA WHERE send_date = v_send_date AND userid = v_ruserid AND depart = v_depart;
+
+                -- SELECT 'INSERT' as text;
+                INSERT INTO DHN_RESULT_STA
+                (send_date, userid, depart, send_cnt, ats_cnt, ate_cnt, fts_cnt, fte_cnt, ftis_cnt, ftie_cnt, ftws_cnt, ftwe_cnt, smss_cnt, smsd_cnt, smse_cnt, lmss_cnt, lmsd_cnt, lmse_cnt, mmss_cnt, mmsd_cnt, mmse_cnt)
+                VALUES(v_send_date, v_ruserid, v_depart, v_send_cnt, v_ats_cnt, v_ate_cnt, v_fts_cnt, v_fte_cnt, v_ftis_cnt, v_ftie_cnt, v_ftws_cnt, v_ftwe_cnt, v_smss_cnt, v_smsd_cnt, v_smse_cnt, v_lmss_cnt, v_lmsd_cnt, v_lmse_cnt, v_mmss_cnt, v_mmsd_cnt, v_mmse_cnt);
+
+                COMMIT;
+            END LOOP res_loop;
+            CLOSE res;
+
+            -- 임시 테이블 삭제
+            DROP TEMPORARY TABLE IF EXISTS tmp_result;
+        END;
+    END LOOP ul_loop;
+    CLOSE user_list;
+    COMMIT;
+END
