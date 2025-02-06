@@ -1,4 +1,4 @@
-CREATE EVENT dhn_result_bk_event
+CREATE EVENT event_dhn_result_bk
 ON SCHEDULE EVERY 1 DAY
 STARTS '2023-10-28 00:20:00.000'
 ON COMPLETION NOT PRESERVE
@@ -14,4 +14,13 @@ DO BEGIN
     DECLARE previous_date VARCHAR(8);
     SET previous_date = DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), '%Y%m%d');
     CALL result_sata_proc(previous_date);
+END
+
+CREATE EVENT event_remove_reception
+ON SCHEDULE EVERY 1 DAY
+STARTS '2024-04-28 00:20:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+    delete from DHN_RECEPTION where insert_date < date_sub(now(), interval 15 DAY);
 END
