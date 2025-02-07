@@ -74,7 +74,7 @@ BEGIN
 			declare v_reg_dt varchar(20);
 
 			declare c_result_list cursor for
-				select userid, msgid , concat (SUBSTR(reg_dt, 1,4),SUBSTR(reg_dt, 6,2)) as reg_dt from DHN_RESULT_BK_TEMP where sync = 'Y';
+				select userid, msgid , concat (SUBSTR(reg_dt, 1,4),SUBSTR(reg_dt, 6,2)) as reg_dt from DHN_RESULT_BK_TEMP where sync = 'C';
 			
 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_res_done = TRUE;
 			
