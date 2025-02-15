@@ -870,6 +870,66 @@ CREATE TABLE `OTP_MMS_LOG` (
   KEY `MMS_LOG_202402_IDX2` (`MSGKEY`,`REQDATE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Oshot SMS
+CREATE TABLE `OShotSMS` (
+  `MsgID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Sender` varchar(15) NOT NULL,
+  `Receiver` varchar(15) NOT NULL,
+  `Msg` varchar(120) NOT NULL,
+  `URL` varchar(80) DEFAULT NULL,
+  `ReserveDT` datetime DEFAULT NULL,
+  `TimeoutDT` datetime DEFAULT NULL,
+  `SendDT` datetime DEFAULT NULL,
+  `SendResult` smallint(6) NOT NULL DEFAULT 0,
+  `Telecom` varchar(7) DEFAULT NULL,
+  `InsertDT` timestamp NOT NULL DEFAULT current_timestamp(),
+  `IdentityCode` varchar(30) DEFAULT NULL,
+  `Etc1` varchar(20) DEFAULT NULL,
+  `Etc2` varchar(20) DEFAULT NULL,
+  `Etc3` varchar(20) DEFAULT NULL,
+  `cb_msg_id` varchar(100) DEFAULT NULL,
+  `proc_flag` varchar(1) DEFAULT 'Y',
+  `mst_id` int(11) DEFAULT NULL,
+  `userid` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`MsgID`),
+  KEY `IDX_OShotSMS` (`SendResult`,`ReserveDT`),
+  KEY `OShotSMS_proc_flag_IDX` (`proc_flag`) USING BTREE,
+  KEY `OShotSMS_cb_msg_id_IDX` (`cb_msg_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Oshot MMS
+CREATE TABLE `OShotMMS` (
+  `MsgID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `MsgGroupID` varchar(20) NOT NULL,
+  `Sender` varchar(15) NOT NULL,
+  `Receiver` varchar(15) NOT NULL,
+  `Subject` varchar(120) DEFAULT NULL,
+  `Msg` varchar(4000) NOT NULL,
+  `ReserveDT` datetime DEFAULT NULL,
+  `TimeoutDT` datetime DEFAULT NULL,
+  `SendDT` datetime DEFAULT NULL,
+  `SendResult` smallint(6) NOT NULL DEFAULT 0,
+  `Telecom` varchar(7) DEFAULT NULL,
+  `File_Path1` varchar(128) DEFAULT NULL,
+  `File_Path2` varchar(128) DEFAULT NULL,
+  `File_Path3` varchar(128) DEFAULT NULL,
+  `File_Path4` varchar(128) DEFAULT NULL,
+  `InsertDT` timestamp NOT NULL DEFAULT current_timestamp(),
+  `IdentityCode` varchar(30) DEFAULT NULL,
+  `Etc1` varchar(20) DEFAULT NULL,
+  `Etc2` varchar(20) DEFAULT NULL,
+  `Etc3` varchar(20) DEFAULT NULL,
+  `cb_msg_id` varchar(100) DEFAULT NULL,
+  `proc_flag` varchar(1) DEFAULT 'Y',
+  `mst_id` int(11) DEFAULT NULL,
+  `userid` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`MsgID`),
+  KEY `IDX_OShotMMS` (`SendResult`,`ReserveDT`,`MsgGroupID`),
+  KEY `OShotMMS_proc_flag_IDX` (`proc_flag`) USING BTREE,
+  KEY `OShotMMS_cb_msg_id_IDX` (`cb_msg_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 -- Oshot 오샷 발송 테이블
 
 CREATE TABLE `OShotMSG` (
