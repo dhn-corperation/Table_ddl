@@ -974,6 +974,50 @@ CREATE TABLE `OShotMSG` (
   KEY `IDX_OShotMSG` (`SendResult`,`ReserveDT`,`MsgGroupID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='메시지큐';
 
+-- Oshot 오샷 OTP 발송 테이블
+
+CREATE TABLE `OTP_OShotMSG` (
+  `MsgID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '메시지PK',
+  `MsgGroupID` varchar(20) NOT NULL,
+  `SendType` varchar(10) NOT NULL,
+  `Sender` varchar(15) NOT NULL,
+  `Receiver` varchar(15) NOT NULL,
+  `Subject` varchar(120) DEFAULT '',
+  `Msg` varchar(4000) NOT NULL,
+  `ReserveDT` datetime DEFAULT NULL,
+  `TimeoutDT` datetime DEFAULT NULL,
+  `SendDT` datetime DEFAULT NULL,
+  `InsertDT` timestamp NOT NULL DEFAULT current_timestamp(),
+  `UpdateDT` datetime DEFAULT NULL,
+  `Telecom` varchar(7) DEFAULT NULL,
+  `SendResult` smallint(6) NOT NULL DEFAULT 0,
+  `KakaoResult` smallint(6) DEFAULT NULL,
+  `QStatus` varchar(10) DEFAULT NULL,
+  `ResultMsg` varchar(300) DEFAULT NULL,
+  `URL` varchar(80) DEFAULT NULL,
+  `File_Path1` varchar(128) DEFAULT NULL,
+  `File_Path2` varchar(128) DEFAULT NULL,
+  `File_Path3` varchar(128) DEFAULT NULL,
+  `File_Path4` varchar(128) DEFAULT NULL,
+  `FilePath` varchar(512) DEFAULT NULL,
+  `MsgType` varchar(2) DEFAULT NULL,
+  `kko_btn_info` varchar(4000) DEFAULT NULL,
+  `img_url` varchar(200) DEFAULT NULL,
+  `img_link` varchar(100) DEFAULT NULL,
+  `FailOver` varchar(1) DEFAULT NULL,
+  `ReplaceMsg` varchar(2000) DEFAULT NULL,
+  `KakaoMethod` varchar(1) DEFAULT NULL,
+  `SenderKey` varchar(40) DEFAULT NULL,
+  `TemplateCode` varchar(30) DEFAULT NULL,
+  `IdentityCode` varchar(30) DEFAULT NULL,
+  `Etc1` varchar(20) DEFAULT NULL,
+  `Etc2` varchar(20) DEFAULT NULL,
+  `Etc3` varchar(20) DEFAULT NULL,
+  `SendResultSub` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`MsgID`),
+  KEY `IDX_OShotMSG` (`SendResult`,`ReserveDT`,`MsgGroupID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='메시지큐';
+
 -- MMS발송용 이미지용 api_mms_images 테이블
 
 CREATE TABLE `api_mms_images` (
