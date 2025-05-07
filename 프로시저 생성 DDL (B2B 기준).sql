@@ -52,12 +52,12 @@ BEGIN
   				    leave ins_loop;
   				end if;
 			
-  			    set @ins_query = CONCAT('insert ignore into ', 'DHN_RESULT_', v_tbl_dt, ' select * from DHN_RESULT_BK_TEMP where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' ');
+  			    set @ins_query = CONCAT('insert ignore into ', 'DHN_RESULT_', v_tbl_dt, ' select * from DHN_RESULT_BK_TEMP where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, '''  and sync = ''Y'' ');
 				prepare stmt from @ins_query;
 				execute stmt;
 				deallocate prepare stmt;	
 			
-				set @ud_query = CONCAT('update DHN_RESULT_BK_TEMP set sync=''C'' where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' ');
+				set @ud_query = CONCAT('update DHN_RESULT_BK_TEMP set sync=''C'' where userid = ''', v_userid , ''' and reg_dt <= ''', v_reg_dt, ''' and sync = ''Y'' ');
 				prepare stmt from @ud_query;
 				execute stmt;
 				deallocate prepare stmt;	
